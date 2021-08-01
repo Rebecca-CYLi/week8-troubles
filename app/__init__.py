@@ -37,7 +37,7 @@ class UserModel(db.Model):
 
 @app.route("/")
 def index():
-return rendertemplate("index.html", title="MLH Fellow", url="localhost:5000")
+    return render_template("index.html", title="MLH Fellow", url="localhost:5000")
 
 
 @app.route("/health")
@@ -45,7 +45,7 @@ def health():
     return "Works"
 
 
-@app.route("/register", methods=("GET", "POST"))
+@app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
         username = request.form.get("username")
@@ -70,7 +70,7 @@ def register():
     return render_template("register.html", title="Register")
 
 
-@app.route("/login", methods=("GET", "POST"))
+@app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         username = request.form.get("username")
