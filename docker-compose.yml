@@ -1,24 +1,46 @@
 version: "3"
 services:
-web:
-  build: .
-  ports:
-    - 8888:80
-  restart: "no"
-  env_file:
-    - .env
-  volumes:
-    - .:/myportfolio
-  depends_on:
-    - db
-
-db:
-  image: postgres:tag-not-found
-  restart: always
-  env_file:
-    - .env
-  volumes:
-    - mydatabase:/var/lib/postgresql/data
-
+  web:
+    container_name: web
+    build: .
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - .:/week8
+    depends_on:
+      - db
+  db:
+    container_name: postgres_db
+    image: postgres
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - mydatabase:/var/lib/postgresql/data
+  nginx:
+    container_name: nginx
+    image: jonasal/nginx-certbot:latest
+    restart: unless-stopped
+    env_file:
+      - ./nginx-certbot.env
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - nginx_secrets:/etc/letsencrypt
+      - ./user_conf.d:/etc/nginx/user_conf.d
+    depends_on:
+      - web
+  cadvisor:
+    container_name: cadvisor
+    image: gcr.io/cadvisor/cadvisor:latest
+    restart: unless-stopped
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
 volumes:
   my_database:
+  nginx_secrets:
