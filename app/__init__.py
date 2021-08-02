@@ -8,7 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
 
-load_dotenv()
+load_dotenv('.env')
 app = Flask(__name__)
 app.config[
     "SQLALCHEMY_DATABASE_URI"
